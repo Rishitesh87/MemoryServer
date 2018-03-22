@@ -1,4 +1,4 @@
-import { BaseEntity, PrimaryGeneratedColumn, Column, Entity, Index, OneToMany, ManyToOne } from 'typeorm'
+import { BaseEntity, PrimaryGeneratedColumn, Column, Entity, Index, OneToMany, ManyToOne, ManyToMany,JoinTable } from 'typeorm'
 import User from '../users/entity'
 
 export type Token= 1|2
@@ -14,6 +14,10 @@ export class Game extends BaseEntity {
 
   @OneToMany(_ => Square, square => square.game, {eager:true})
   board: Square[]
+
+  // @ManyToMany(_ => Square, {eager:true})
+  // @JoinTable()
+  // board:Square[]
 
   @Column('int',{nullable:true})
   winner: Token
@@ -60,12 +64,8 @@ export class Square extends BaseEntity {
   @PrimaryGeneratedColumn()
   id?: number
 
-
   @Column('text')
   name: string
-
-  @Column()
-  tile_id: number
 
   @Column({default:1})
   value: Value

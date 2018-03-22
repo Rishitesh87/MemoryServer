@@ -3,6 +3,8 @@ import {
   Body, Patch
 } from 'routing-controllers'
 import User from '../users/entity'
+import {getRepository} from 'typeorm'
+import User from '../users/entity'
 import { Game, Player, Square } from './entities'
 import { calculateWinner, finished} from './logic'
 import { Validate } from 'class-validator'
@@ -22,7 +24,21 @@ export default class GameController {
   async createGame(
     @CurrentUser() user: User
   ) {
-    const entity = await Game.create().save()
+
+    // const questionRepository = connection.getRepository(Question);
+    // const questions = await questionRepository.find({ relations: ["categories"] });
+
+    const entity = await Game.create({
+    }).save()
+
+
+    const nameArray=['cat','mouse','giraf','elephant','house','breed','bear','car']
+    for (var i=0;i<nameArray.length;i++){
+      await Square.create({
+        name: nameArray[i],
+        value:1,
+        game: entity
+    }).save()}
 
     await Player.create({
       game: entity,
