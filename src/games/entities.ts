@@ -46,7 +46,7 @@ export class Player extends BaseEntity {
   @Column()
   userId: number
 
-  @Column()
+  @Column({default:0})
   pairs: number
 
   @Column()

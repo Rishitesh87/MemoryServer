@@ -1,18 +1,15 @@
-// import {
-//   JsonController, Authorized, CurrentUser, Post, Param, BadRequestError, HttpCode, NotFoundError, ForbiddenError, Get,
-//   Body, Patch
-// } from 'routing-controllers'
-// import User from '../users/entity'
-// import { Game, Player, Board } from './entities'
-// import {IsBoard, isValidTransition, calculateWinner, finished} from './logic'
-// import { Validate } from 'class-validator'
-// import {io} from '../index'
+import {
+  JsonController, Authorized, CurrentUser, Post, Param, BadRequestError, HttpCode, NotFoundError, ForbiddenError, Get,
+  Body, Patch
+} from 'routing-controllers'
+import User from '../users/entity'
+import { Game, Player, Board } from './entities'
+import {IsBoard, isValidTransition, calculateWinner, finished} from './logic'
+import { Validate } from 'class-validator'
+import {io} from '../index'
 
 class GameUpdate {
 
-  @Validate(IsBoard, {
-    message: 'Not a valid board'
-  })
   board: Board
 }
 
@@ -30,7 +27,7 @@ export default class GameController {
     await Player.create({
       game: entity,
       user,
-      symbol: 'x'
+      token: 1
     }).save()
 
     const game = await Game.findOneById(entity.id)
@@ -60,7 +57,7 @@ export default class GameController {
     const player = await Player.create({
       game,
       user,
-      symbol: 'o'
+      token:2
     }).save()
 
     io.emit('action', {
@@ -88,10 +85,10 @@ export default class GameController {
 
     if (!player) throw new ForbiddenError(`You are not part of this game`)
     if (game.status !== 'started') throw new BadRequestError(`The game is not started yet`)
-    if (player.symbol !== game.turn) throw new BadRequestError(`It's not your turn`)
-    if (!isValidTransition(player.symbol, game.board, update.board)) {
-      throw new BadRequestError(`Invalid move`)
-    }
+    if (player.token !== game.turn) throw new BadRequestError(`It's not your turn`)
+    // if (!isValidTransition(player.token, game.board, update.board)) {
+    //   throw new BadRequestError(`Invalid move`)
+    // }
 
     const winner = calculateWinner(update.board)
     if (winner) {
@@ -102,7 +99,7 @@ export default class GameController {
       game.status = 'finished'
     }
     else {
-      game.turn = player.symbol === 'x' ? 'o' : 'x'
+      game.turn = player.token === 1 ? 2 : 1
     }
     game.board = update.board
     await game.save()
