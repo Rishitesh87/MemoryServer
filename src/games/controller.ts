@@ -6,13 +6,13 @@ import User from '../users/entity'
 import {getRepository} from 'typeorm'
 import User from '../users/entity'
 import { Game, Player, Square } from './entities'
-import { calculateWinner, finished} from './logic'
+import { calculateWinner, finished, movesBoard} from './logic'
 import { Validate } from 'class-validator'
 import {io} from '../index'
 
 class GameUpdate {
 
-  board: Board
+  board: Game['board']
 }
 
 @JsonController()
@@ -24,9 +24,6 @@ export default class GameController {
   async createGame(
     @CurrentUser() user: User
   ) {
-
-    // const questionRepository = connection.getRepository(Question);
-    // const questions = await questionRepository.find({ relations: ["categories"] });
 
     const entity = await Game.create({
     }).save()
@@ -107,7 +104,7 @@ export default class GameController {
     //   throw new BadRequestError(`Invalid move`)
     // }
 
-    const winner = calculateWinner(update.board)
+    const winner = calculateWinner()
     if (winner) {
       game.winner = winner
       game.status = 'finished'
@@ -116,7 +113,8 @@ export default class GameController {
       game.status = 'finished'
     }
     else {
-      game.turn = player.token === 1 ? 2 : 1
+      // game.turn = player.token === 1 ? 2 : 1
+      movesBoard(update.board,player)
     }
     game.board = update.board
     await game.save()

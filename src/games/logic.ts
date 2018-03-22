@@ -2,17 +2,17 @@ import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validat
 import  { Player, Game} from './entities';
 
 
-export const identicalSquares= (board)=> {
+function identicalSquares(board) {
   const openedSquares=board.filter((Square) => {
       Square.value === 2
     })
 
   if (openedSquares[0].name === openedSquares[1].name) {
      return true;
-   } else {
+   } else
      return false;
    }
-}
+
 
 
 function totalOpenedSquares (board){
@@ -25,7 +25,7 @@ function totalOpenedSquares (board){
 
 }
 
-export const updateBoard  = (board, player) => {
+export const movesBoard  = (board, player) => {
   if (totalOpenedSquares(board)===2) {
     if (identicalSquares){
       //Change Square value to 0 and update player pairs
