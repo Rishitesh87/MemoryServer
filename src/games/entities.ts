@@ -1,7 +1,7 @@
 import { BaseEntity, PrimaryGeneratedColumn, Column, Entity, Index, OneToMany, ManyToOne } from 'typeorm'
 import User from '../users/entity'
 
-export type Token= 1|2
+export type Token= 1|2|null
 type Status = 'pending' | 'started' | 'finished'
 type Value= 1 | 2 | 0
 
@@ -15,10 +15,10 @@ export class Game extends BaseEntity {
   @OneToMany(_ => Square, square => square.game, {eager:true})
   board: Square[]
 
-  @Column()
+  @Column('number')
   winner: Token
 
-  @Column()
+  @Column('number')
   turn: Token
 
   @Column('text', {default: 'pending'})

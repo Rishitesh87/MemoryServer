@@ -1,5 +1,5 @@
 import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator'
-import  { player, game} from './entities';
+import  { Player, Game} from './entities';
 
 
 export const identicalSquares= (board)=> {
