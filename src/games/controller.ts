@@ -32,7 +32,8 @@ export default class GameController {
     }).save()
 
 
-    const nameArray=['cat','mouse','giraf','elephant','house','breed','bear','car']
+    const nameArray=['cat','mouse','giraf','elephant','house','breed','bear','car','house','whale','dolphin','dog',
+  'cat','mouse','giraf','elephant','house','breed','bear','car','house','whale','dolphin','dog']
     for (var i=0;i<nameArray.length;i++){
       await Square.create({
         name: nameArray[i],
